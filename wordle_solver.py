@@ -67,7 +67,7 @@ def play_game(game):
         pattern = game.play_turn(guess)
         remaining_puzzle_words &= _guess2pattern2secrets[guess][pattern]
 
-    return game
+    return game.status() == 'won', len(game.turns)
 
 
 if __name__ == '__main__':
@@ -79,5 +79,7 @@ if __name__ == '__main__':
 
     end_time = monotonic()
     print(f"done in {end_time - start_time:.2f} seconds")
-    print(sum(g.status() == 'won' for g in results))
-    print(sum(len(g.turns) for g in results) / len(results))
+    print("=" * 20)
+    print(f"total games: {len(results):d}")
+    print(f"successful games: {sum(won for won, _ in results)}")
+    print(f"average turns in successful games: {sum(turns for won, turns in results if won) / len(results):.2f}")
